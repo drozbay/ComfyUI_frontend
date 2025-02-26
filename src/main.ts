@@ -10,6 +10,7 @@ import ConfirmationService from 'primevue/confirmationservice'
 import ToastService from 'primevue/toastservice'
 import Tooltip from 'primevue/tooltip'
 import { createApp } from 'vue'
+import InstantSearch from 'vue-instantsearch'
 
 import '@/assets/css/style.css'
 import router from '@/router'
@@ -58,4 +59,5 @@ app
   .use(ToastService)
   .use(pinia)
   .use(i18n)
+  .use(InstantSearch)
   .mount('#vue-app')

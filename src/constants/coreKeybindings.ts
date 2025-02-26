@@ -3,6 +3,14 @@ import type { Keybinding } from '@/schemas/keyBindingSchema'
 export const CORE_KEYBINDINGS: Keybinding[] = [
   {
     combo: {
+      alt: true,
+      shift: true,
+      key: 'n'
+    },
+    commandId: 'Comfy.RegistryNodeSearch'
+  },
+  {
+    combo: {
       ctrl: true,
       key: 'Enter'
     },
