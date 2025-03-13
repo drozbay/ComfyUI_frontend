@@ -92,7 +92,8 @@
     "sort": "Sort",
     "filter": "Filter",
     "apply": "Apply",
-    "enabled": "Enabled"
+    "enabled": "Enabled",
+    "installed": "Installed"
   },
   "manager": {
     "title": "Custom Nodes Manager",
