@@ -4,6 +4,13 @@
       <InfoPanelHeader :node-packs="[nodePack]" />
       <div class="mb-6">
         <MetadataRow
+          v-if="managerStore.isPackInstalled(nodePack.id)"
+          class="flex gap-2 w-full justify-center"
+          :label="t('g.enabled')"
+        >
+          <PackEnableToggle :node-pack="nodePack" />
+        </MetadataRow>
+        <MetadataRow
           v-for="item in infoItems"
           v-show="item.value !== undefined && item.value !== null"
           :key="item.key"
@@ -34,9 +41,11 @@ import { useI18n } from 'vue-i18n'
 
 import PackStatusMessage from '@/components/dialog/content/manager/PackStatusMessage.vue'
 import PackVersionBadge from '@/components/dialog/content/manager/PackVersionBadge.vue'
+import PackEnableToggle from '@/components/dialog/content/manager/button/PackEnableToggle.vue'
 import InfoPanelHeader from '@/components/dialog/content/manager/infoPanel/InfoPanelHeader.vue'
 import InfoTabs from '@/components/dialog/content/manager/infoPanel/InfoTabs.vue'
 import MetadataRow from '@/components/dialog/content/manager/infoPanel/MetadataRow.vue'
+import { useComfyManagerStore } from '@/stores/comfyManagerStore'
 import { components } from '@/types/comfyRegistryTypes'
 
 interface InfoItem {
@@ -50,6 +59,7 @@ const { nodePack } = defineProps<{
 }>()
 
 const { t, d, n } = useI18n()
+const managerStore = useComfyManagerStore()
 
 const infoItems = computed<InfoItem[]>(() => [
   {
