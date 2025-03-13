@@ -32,7 +32,6 @@
             v-model:searchQuery="searchQuery"
             :searchResults="searchResults"
             @update:sortBy="handleSortChange"
-            @update:filterBy="handleFilterChange"
           />
           <div class="flex-1 overflow-auto">
             <div
@@ -42,14 +41,14 @@
               <ProgressSpinner />
             </div>
             <NoResultsPlaceholder
-              v-else-if="error || searchResults.length === 0"
+              v-else-if="searchResults.length === 0"
               :title="
-                error
+                comfyManagerStore.error
                   ? $t('manager.errorConnecting')
                   : $t('manager.noResultsFound')
               "
               :message="
-                error
+                comfyManagerStore.error
                   ? $t('manager.tryAgainLater')
                   : $t('manager.tryDifferentSearch')
               "
@@ -142,8 +141,9 @@ const tabs = ref<TabItem[]>([
 ])
 const selectedTab = ref<TabItem>(tabs.value[0])
 
-const { searchQuery, pageNumber, sortField, isLoading, error, searchResults } =
+const { searchQuery, pageNumber, sortField, isLoading, searchResults } =
   useRegistrySearch()
+
 pageNumber.value = 1
 
 const isInitialLoad = computed(
@@ -156,8 +156,8 @@ const isEmptySearch = computed(() => searchQuery.value === '')
 
 const getInstalledSearchResults = async () => {
   if (isEmptySearch.value) return getInstalledPacks()
-  return searchResults.value.filter((pack) =>
-    comfyManagerStore.installedPacksIds.has(pack.name)
+  return searchResults.value.filter(
+    (pack) => pack.name && comfyManagerStore.installedPacksIds.has(pack.name)
   )
 }
 
@@ -217,11 +217,7 @@ const handleGridContainerClick = (event: MouseEvent) => {
 const showInfoPanel = computed(() => selectedNodePacks.value.length > 0)
 const hasMultipleSelections = computed(() => selectedNodePacks.value.length > 1)
 
-const currentFilterBy = ref('all')
 const handleSortChange = (sortBy: PackField) => {
   sortField.value = sortBy
-}
-const handleFilterChange = (filterBy: PackField) => {
-  currentFilterBy.value = filterBy
 }
 </script>
