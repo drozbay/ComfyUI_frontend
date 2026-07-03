@@ -52,6 +52,35 @@
   font-size: 12px;
 }
 
+/* Classic node proportions. Nodes 2.0 permanently inflates node sizes when
+   toggled on: the node's natural DOM size (which includes the badge row,
+   body padding, footer strip, and a 225px width floor that classic never
+   had) is measured by a ResizeObserver and written back into node.size,
+   which then serializes into the workflow. Bring the natural DOM size back
+   in line with litegraph's computeSize() so round-tripping is lossless.
+   The [class*='min-w-(--min-node-width)'] hooks intentionally skip reroute
+   nodes, which never carry that utility. */
+.classic-theme .lg-node[class*='min-w-(--min-node-width)'],
+.classic-theme .lg-node [class*='min-w-(--min-node-width)'] {
+  min-width: 140px; /* LiteGraph.NODE_WIDTH */
+}
+
+/* Badges (node id, API pricing, etc.) float above the node like classic
+   instead of occupying a row at the bottom of the body */
+.classic-theme .lg-node .lg-node-badges {
+  position: absolute;
+  top: -26px;
+  right: 0;
+  width: auto;
+  padding: 0;
+  justify-content: flex-end;
+}
+
+/* Classic has no "Show advanced inputs" footer strip */
+.classic-theme .lg-node [data-testid='advanced-inputs-button'] {
+  display: none;
+}
+
 .classic-theme .lg-node .lg-node-widgets {
   /* Pill capsule: NODE_WIDGET_HEIGHT / 2; rounded-md resolves to this var */
   --radius-md: 10px;
