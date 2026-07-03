@@ -91,18 +91,16 @@
   font-size: 12px;
 }
 
-/* Classic widget rows are NODE_WIDGET_HEIGHT = 20px, not the default 24px */
-.classic-theme .lg-node .lg-node-widgets .h-6 {
-  height: 1.25rem;
-}
-
 /* Classic widgets are a single capsule containing both the label (left, in
    WIDGET_SECONDARY_TEXT_COLOR) and the value (right, in WIDGET_TEXT_COLOR).
    The pill is painted on the layout-field row and the control surfaces inside
    go transparent, so label and value share the capsule. Inset box-shadow
    instead of border so layout is unaffected. */
 .classic-theme .lg-node .lg-widget-field {
-  border-radius: 10px;
+  /* Full capsule at any row height (widget grid rows are 24px, single-line
+     text widgets 32px). Controls keep their native height and fill the row;
+     shrinking them below the grid row height misaligns their contents. */
+  border-radius: 9999px;
   background-color: var(--component-node-widget-background, #222);
   box-shadow: inset 0 0 0 1px var(--node-component-border, #666);
 }
