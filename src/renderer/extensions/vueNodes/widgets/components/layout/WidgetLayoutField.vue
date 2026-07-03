@@ -27,7 +27,7 @@ const borderStyle = computed(() =>
   <div
     :class="
       cn(
-        'grid min-w-0 grid-cols-subgrid justify-between gap-2 text-node-component-slot-text',
+        'lg-widget-field grid min-w-0 grid-cols-subgrid justify-between gap-2 text-node-component-slot-text',
         rootClass
       )
     "
@@ -35,14 +35,14 @@ const borderStyle = computed(() =>
     <div
       v-if="!hideLayoutField"
       data-testid="widget-layout-field-label"
-      class="content-center-safe truncate"
+      class="lg-widget-field-label content-center-safe truncate"
     >
       <template v-if="widget.name">
         {{ widget.label || widget.name }}
       </template>
     </div>
     <!-- basis-full grow -->
-    <div class="relative min-w-0 flex-1">
+    <div class="lg-widget-field-control relative min-w-0 flex-1">
       <div
         :class="
           cn(

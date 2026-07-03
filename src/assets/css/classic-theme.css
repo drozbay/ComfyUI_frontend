@@ -63,13 +63,66 @@
   height: 1.25rem;
 }
 
-/* WIDGET_OUTLINE_COLOR ring on widget control surfaces. Inset box-shadow
-   instead of border so control layout is unaffected. The [class*=...] hook
-   matches WidgetInputBaseClass surfaces; requiring rounded-md alongside it
-   excludes inner buttons (rounded-none) and hover-only variants. */
+/* Classic widgets are a single capsule containing both the label (left, in
+   WIDGET_SECONDARY_TEXT_COLOR) and the value (right, in WIDGET_TEXT_COLOR).
+   The pill is painted on the layout-field row and the control surfaces inside
+   go transparent, so label and value share the capsule. Inset box-shadow
+   instead of border so layout is unaffected. */
+.classic-theme .lg-node .lg-widget-field {
+  border-radius: 10px;
+  background-color: var(--component-node-widget-background, #222);
+  box-shadow: inset 0 0 0 1px var(--node-component-border, #666);
+}
+
+.classic-theme .lg-node .lg-widget-field:hover {
+  background-color: #2a2a2a;
+}
+
+.classic-theme .lg-node .lg-widget-field-label {
+  padding-left: 10px;
+  color: #999; /* WIDGET_SECONDARY_TEXT_COLOR */
+}
+
+/* Control surfaces inside the capsule: let the row's pill show through.
+   The [class*=...] hook matches WidgetInputBaseClass surfaces and their
+   hover variants. */
 .classic-theme
   .lg-node
-  .lg-node-widgets
-  [class*='rounded-md'][class*='bg-component-node-widget-background'] {
+  .lg-widget-field
+  [class*='bg-component-node-widget-background'] {
+  background-color: transparent;
+  box-shadow: none;
+}
+
+/* Classic values are right-aligned inside the capsule */
+.classic-theme .lg-node .lg-widget-field input:not([type='checkbox']) {
+  text-align: right;
+}
+
+/* Number stepper buttons sit mid-capsule (start of the control column),
+   which classic never showed; reveal them on hover only. To be replaced by
+   edge-anchored arrows in a later pass. */
+.classic-theme
+  .lg-node
+  .lg-widget-field
+  :is([data-testid='decrement'], [data-testid='increment']) {
+  opacity: 0;
+  transition: opacity 150ms;
+}
+
+.classic-theme
+  .lg-node
+  .lg-widget-field:hover
+  :is([data-testid='decrement'], [data-testid='increment']) {
+  opacity: 1;
+}
+
+.classic-theme .lg-node .lg-widget-field [role='combobox'] > span {
+  text-align: right;
+}
+
+/* Multiline text widgets have no label capsule; they keep their own block
+   surface, with the classic WIDGET_OUTLINE_COLOR ring on the field itself */
+.classic-theme .lg-node textarea[class*='bg-component-node-widget-background'] {
   box-shadow: inset 0 0 0 1px var(--node-component-border, #666);
 }
