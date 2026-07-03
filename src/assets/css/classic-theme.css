@@ -27,8 +27,12 @@
   filter: drop-shadow(2px 2px 3px rgb(0 0 0 / 0.5));
 }
 
-/* Title bar: NODE_TITLE_HEIGHT = 30, title text in NODE_TITLE_COLOR */
+/* Title bar: NODE_TITLE_HEIGHT = 30, title text vertically centered in the
+   bar (classic draws the baseline at NODE_TITLE_TEXT_Y), in NODE_TITLE_COLOR */
 .classic-theme .lg-node .lg-node-header {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
   min-height: 30px;
   padding-top: 0;
   padding-bottom: 0;
