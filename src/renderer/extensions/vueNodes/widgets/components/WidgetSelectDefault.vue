@@ -24,6 +24,16 @@
             )
           "
         >
+          <button
+            type="button"
+            tabindex="-1"
+            :disabled
+            :aria-label="$t('g.previous')"
+            class="lg-combo-step hidden h-full shrink-0 cursor-pointer items-center justify-center border-none bg-transparent p-0 outline-none disabled:cursor-default"
+            @click.stop="stepOption(-1)"
+          >
+            &#9664;
+          </button>
           <ComboboxTrigger as-child>
             <button
               type="button"
@@ -64,6 +74,16 @@
               "
               aria-hidden="true"
             />
+          </button>
+          <button
+            type="button"
+            tabindex="-1"
+            :disabled
+            :aria-label="$t('g.next')"
+            class="lg-combo-step hidden h-full shrink-0 cursor-pointer items-center justify-center border-none bg-transparent p-0 outline-none disabled:cursor-default"
+            @click.stop="stepOption(1)"
+          >
+            &#9654;
           </button>
         </div>
       </ComboboxAnchor>
@@ -331,6 +351,24 @@ const selectedLabel = computed(() => {
   if (isInvalid.value) return String(modelValue.value)
   return ''
 })
+
+/** Classic-theme ◀ ▶ arrows: cycle to the previous/next option without
+ * opening the dropdown, wrapping around at either end. */
+function stepOption(direction: number) {
+  const options = normalizedOptions.value
+  if (!options.length) return
+
+  const currentIndex = options.findIndex(
+    (option) => option.value === modelValue.value
+  )
+  const nextIndex =
+    currentIndex === -1
+      ? direction > 0
+        ? 0
+        : options.length - 1
+      : (currentIndex + direction + options.length) % options.length
+  modelValue.value = options[nextIndex].value
+}
 
 function selectOption(rekaValue: string | undefined) {
   const value = fromComboboxValue(rekaValue)

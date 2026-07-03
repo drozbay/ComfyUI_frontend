@@ -170,22 +170,47 @@
   text-align: right;
 }
 
-/* Number stepper buttons sit mid-capsule (start of the control column),
-   which classic never showed; reveal them on hover only. To be replaced by
-   edge-anchored arrows in a later pass. */
+/* Number widgets: the stepper buttons read as classic ◀ ▶ arrows. The
+   iconify <i> is a mask element; drop the mask and render the arrow glyph
+   via ::before in its place. */
 .classic-theme
   .lg-node
   .lg-widget-field
-  :is([data-testid='decrement'], [data-testid='increment']) {
-  opacity: 0;
-  transition: opacity 150ms;
+  :is([data-testid='decrement'], [data-testid='increment'])
+  i {
+  width: auto;
+  height: auto;
+  mask: none;
+  background-color: transparent;
+  font-size: 9px;
+  font-style: normal;
+  line-height: 1;
+  color: var(--node-component-header, #999);
+}
+
+.classic-theme .lg-node .lg-widget-field [data-testid='decrement'] i::before {
+  content: '\25c0';
+}
+
+.classic-theme .lg-node .lg-widget-field [data-testid='increment'] i::before {
+  content: '\25b6';
+}
+
+/* Combo widgets: classic ◀ ▶ step arrows (rendered hidden by
+   WidgetSelectDefault) replace the dropdown chevron; the value area still
+   opens the list on click */
+.classic-theme .lg-node .lg-widget-field .lg-combo-step {
+  display: flex;
+  width: 20px;
+  font-size: 9px;
+  color: var(--node-component-header, #999);
 }
 
 .classic-theme
   .lg-node
-  .lg-widget-field:hover
-  :is([data-testid='decrement'], [data-testid='increment']) {
-  opacity: 1;
+  .lg-widget-field
+  button:has(> i[class*='chevron-down']) {
+  display: none;
 }
 
 .classic-theme .lg-node .lg-widget-field [role='combobox'] > span {
