@@ -13,6 +13,7 @@ import type { IWidgetOptions } from '@/lib/litegraph/src/types/widgets'
 import { LGraphEventMode } from '@/lib/litegraph/src/types/globalEnums'
 import { useSettingStore } from '@/platform/settings/settingStore'
 import { useCanvasStore } from '@/renderer/core/canvas/canvasStore'
+import { useColorPaletteStore } from '@/stores/workspace/colorPaletteStore'
 import { app } from '@/scripts/app'
 import { useNodeTooltips } from '@/renderer/extensions/vueNodes/composables/useNodeTooltips'
 import { useNodeEventHandlers } from '@/renderer/extensions/vueNodes/composables/useNodeEventHandlers'
@@ -403,6 +404,7 @@ export function useProcessedWidgets(
 ) {
   const canvasStore = useCanvasStore()
   const settingStore = useSettingStore()
+  const colorPaletteStore = useColorPaletteStore()
   const { isSelectInputsMode } = useAppMode()
   const { handleNodeRightClick } = useNodeEventHandlers()
 
@@ -417,10 +419,15 @@ export function useProcessedWidgets(
     handleNodeRightClick
   }
 
+  // Classic litegraph has no advanced-inputs toggle: every widget renders
+  // inline, and classic node sizes reserve rows for them. The classic theme
+  // hides the toggle footer, so keep those widgets reachable by always
+  // showing them.
   const showAdvanced = computed(
     () =>
       nodeDataGetter()?.showAdvanced ||
-      settingStore.get('Comfy.Node.AlwaysShowAdvancedWidgets')
+      settingStore.get('Comfy.Node.AlwaysShowAdvancedWidgets') ||
+      colorPaletteStore.completedActivePalette.id === 'classic'
   )
 
   const canSelectInputs = computed(() => {

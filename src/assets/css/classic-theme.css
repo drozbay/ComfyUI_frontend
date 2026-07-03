@@ -183,6 +183,16 @@
   box-shadow: none;
 }
 
+/* Advanced widgets render inline in classic (there is no advanced-inputs
+   toggle), so drop the ring that marks them as advanced; only the resting
+   ring color is neutralized so the focus-within ring keeps working */
+.classic-theme
+  .lg-node
+  .lg-widget-field
+  [class*='ring-component-node-widget-advanced']:not(:focus-within) {
+  --tw-ring-color: transparent;
+}
+
 /* Classic values are right-aligned inside the capsule */
 .classic-theme .lg-node .lg-widget-field input:not([type='checkbox']) {
   text-align: right;
