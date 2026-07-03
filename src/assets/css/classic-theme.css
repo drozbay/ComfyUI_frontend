@@ -87,21 +87,20 @@
   justify-content: flex-end;
 }
 
-/* Classic has no "Show advanced inputs" footer strip (advanced widgets render
-   inline instead). Hide the whole strip, not just the button: the strip
-   wrapper carries a -20px top margin, and leaving it behind as an orphaned
-   empty element makes the node's layout box 20px shorter than its rendered
-   content, so the selection outline cuts through the last widget row. When
-   the strip also contains an error tab, keep the strip and hide only the
-   advanced button. */
-.classic-theme
-  .lg-node
-  div:has(> [data-testid='advanced-inputs-button']:only-child) {
-  display: none;
+/* The "Show advanced inputs" strip is a Nodes 2.0 feature worth keeping in
+   classic; reskin it to calm classic typography. The strip must stay in the
+   layout flow: its wrapper carries a -20px top margin, and hiding only its
+   content once left that margin orphaned, shrinking the node's layout box
+   20px below its rendered content (the selection outline then cut through
+   the last widget row). */
+.classic-theme .lg-node [data-testid='advanced-inputs-button'] {
+  font-size: 10px;
+  color: var(--node-component-header, #999);
 }
 
-.classic-theme .lg-node [data-testid='advanced-inputs-button'] {
-  display: none;
+.classic-theme .lg-node [data-testid='advanced-inputs-button'] i {
+  width: 12px;
+  height: 12px;
 }
 
 .classic-theme .lg-node .lg-node-widgets {
@@ -195,14 +194,14 @@
   box-shadow: none;
 }
 
-/* Advanced widgets render inline in classic (there is no advanced-inputs
-   toggle), so drop the ring that marks them as advanced; only the resting
-   ring color is neutralized so the focus-within ring keeps working */
+/* Expanded advanced widgets keep their marker ring, recolored to litegraph's
+   own WIDGET_ADVANCED_OUTLINE_COLOR; :not(:focus-within) leaves the
+   focus-within ring color untouched */
 .classic-theme
   .lg-node
   .lg-widget-field
   [class*='ring-component-node-widget-advanced']:not(:focus-within) {
-  --tw-ring-color: transparent;
+  --tw-ring-color: rgb(56 139 253 / 0.8);
 }
 
 /* Classic values are right-aligned inside the capsule */
