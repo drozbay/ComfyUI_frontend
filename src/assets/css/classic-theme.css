@@ -40,6 +40,13 @@
   color: var(--node-component-header, #999);
 }
 
+/* Classic 1px separator line between the title bar and the node body
+   (litegraph draws it black at 20% opacity); omitted when collapsed, like
+   classic, since there is no body below the title */
+.classic-theme .lg-node:not([data-collapsed]) .lg-node-header {
+  border-bottom: 1px solid rgb(0 0 0 / 0.2);
+}
+
 /* Collapse chevron becomes the classic title-box dot (NODE_DEFAULT_BOXCOLOR).
    The icon is an iconify mask element; dropping the mask leaves a solid
    square that border-radius turns into the dot. */
@@ -110,10 +117,21 @@
 
 /* Classic multiline text widgets are shorter than the default 64px minimum
    and have no floating label inside; 50px lands CLIPTextEncode exactly on
-   its classic computeSize() height */
+   its classic computeSize() height. Tight padding, classic line spacing,
+   and near-square corners keep as many characters per line as classic. */
 .classic-theme .lg-node .lg-node-widget textarea {
   min-height: 50px;
-  padding-top: 4px;
+  padding: 4px;
+  line-height: 1.2;
+  border-radius: 2px;
+  scrollbar-width: thin;
+  scrollbar-color: var(--node-component-border, #666) transparent;
+}
+
+/* Keep the wrapper's corners in step with the near-square textarea so the
+   scrollbar isn't clipped by a rounder parent corner */
+.classic-theme .lg-node .lg-node-widget div:has(> textarea) {
+  border-radius: 2px;
 }
 
 .classic-theme .lg-node .lg-node-widget div:has(> textarea) > label {
