@@ -87,7 +87,19 @@
   justify-content: flex-end;
 }
 
-/* Classic has no "Show advanced inputs" footer strip */
+/* Classic has no "Show advanced inputs" footer strip (advanced widgets render
+   inline instead). Hide the whole strip, not just the button: the strip
+   wrapper carries a -20px top margin, and leaving it behind as an orphaned
+   empty element makes the node's layout box 20px shorter than its rendered
+   content, so the selection outline cuts through the last widget row. When
+   the strip also contains an error tab, keep the strip and hide only the
+   advanced button. */
+.classic-theme
+  .lg-node
+  div:has(> [data-testid='advanced-inputs-button']:only-child) {
+  display: none;
+}
+
 .classic-theme .lg-node [data-testid='advanced-inputs-button'] {
   display: none;
 }
