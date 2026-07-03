@@ -91,6 +91,46 @@
   font-size: 12px;
 }
 
+/* Classic widget rows are NODE_WIDGET_HEIGHT = 20px. The grid rows are
+   min-content sized, so capping the two 24px drivers (the h-6 control
+   height and the slot-dot container in each row) shrinks the row itself;
+   contents then fill the row and stay centered. */
+.classic-theme .lg-node .lg-node-widget .h-6,
+.classic-theme .lg-node .lg-node-widget .h-8,
+.classic-theme .lg-node .lg-node-widget [data-testid='slot-connection-dot'] {
+  height: 1.25rem;
+}
+
+/* Single-line text widgets: the PrimeVue input's intrinsic padding makes it
+   32px tall; cap it to the classic 20px row */
+.classic-theme .lg-node .lg-widget-field .p-inputtext {
+  height: 1.25rem;
+  padding-block: 0;
+}
+
+/* Classic multiline text widgets are shorter than the default 64px minimum
+   and have no floating label inside; 50px lands CLIPTextEncode exactly on
+   its classic computeSize() height */
+.classic-theme .lg-node .lg-node-widget textarea {
+  min-height: 50px;
+  padding-top: 4px;
+}
+
+.classic-theme .lg-node .lg-node-widget div:has(> textarea) > label {
+  display: none;
+}
+
+/* Classic computeSize() leaves 10px below the last widget, vs pb-3 (12px);
+   with 20px rows this makes node heights match litegraph exactly */
+.classic-theme .lg-node [data-testid^='node-body-'] {
+  padding-bottom: 10px;
+}
+
+/* Widget-less nodes (e.g. VAEDecode) get a smaller classic bottom margin */
+.classic-theme .lg-node [data-testid^='node-body-']:not(:has(.lg-node-widgets)) {
+  padding-bottom: 2px;
+}
+
 /* Classic widgets are a single capsule containing both the label (left, in
    WIDGET_SECONDARY_TEXT_COLOR) and the value (right, in WIDGET_TEXT_COLOR).
    The pill is painted on the layout-field row and the control surfaces inside
