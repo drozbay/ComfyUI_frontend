@@ -170,10 +170,11 @@ export function useNodeResize(
         newHeight = snappedSize.height
       }
 
-      // Enforce minimum size with position compensation (matching litegraph)
+      // Enforce minimum size with position compensation (matching litegraph).
+      // Use the computed min-width so themes that narrow it via stylesheet
+      // (e.g. classic's 140px litegraph width) are respected.
       const minWidth =
-        parseFloat(nodeElement.style.getPropertyValue('min-width') || '0') ||
-        MIN_NODE_WIDTH
+        parseFloat(getComputedStyle(nodeElement).minWidth) || MIN_NODE_WIDTH
       if (newWidth < minWidth) {
         if (isWestCorner) {
           newX =

@@ -520,8 +520,12 @@ const mutations = useLayoutMutations()
 const { startResize } = useNodeResize((result, element) => {
   if (isCollapsed.value) return
 
-  // Clamp width to minimum to avoid conflicts with CSS min-width
-  const clampedWidth = Math.max(result.size.width, MIN_NODE_WIDTH)
+  // Clamp width to minimum to avoid conflicts with CSS min-width; read the
+  // computed value so themes that narrow it via stylesheet (e.g. classic's
+  // 140px litegraph width) are respected
+  const minWidth =
+    parseFloat(getComputedStyle(element).minWidth) || MIN_NODE_WIDTH
+  const clampedWidth = Math.max(result.size.width, minWidth)
 
   // Apply size directly to DOM element - ResizeObserver will pick this up
   element.style.setProperty('--node-width', `${clampedWidth}px`)
