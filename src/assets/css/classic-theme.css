@@ -76,6 +76,17 @@
   min-width: 140px; /* LiteGraph.NODE_WIDTH */
 }
 
+/* Nodes with widgets: classic computeSize() floors these at NODE_WIDTH * 1.5
+   so widget content always fits; collapsed nodes have no widget grid and
+   keep the 140px floor */
+.classic-theme
+  .lg-node[class*='min-w-(--min-node-width)']:has(.lg-node-widgets),
+.classic-theme
+  .lg-node:has(.lg-node-widgets)
+  [class*='min-w-(--min-node-width)'] {
+  min-width: 210px;
+}
+
 /* Badges (node id, API pricing, etc.) float above the node like classic
    instead of occupying a row at the bottom of the body */
 .classic-theme .lg-node .lg-node-badges {
@@ -107,6 +118,13 @@
   /* Pill capsule: NODE_WIDGET_HEIGHT / 2; rounded-md resolves to this var */
   --radius-md: 10px;
   font-size: 12px;
+
+  /* The default value-column floor of 125px makes the grid's min-content
+     ~217px, wider than the classic 210px node floor; relax it so widgets
+     never poke out of a minimum-width node (values truncate like classic) */
+  grid-template-columns:
+    min-content minmax(80px, min-content)
+    minmax(90px, 1fr);
 }
 
 /* Classic widget rows are NODE_WIDGET_HEIGHT = 20px. The grid rows are
