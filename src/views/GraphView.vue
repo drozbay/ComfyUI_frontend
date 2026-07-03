@@ -133,6 +133,10 @@ watch(
     } else {
       document.documentElement.classList.add(DARK_THEME_CLASS)
     }
+    document.documentElement.classList.toggle(
+      'classic-theme',
+      newTheme.id === 'classic'
+    )
     if (isDesktop) {
       electronAPI().changeTheme({
         color: 'rgba(0, 0, 0, 0)',

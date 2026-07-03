@@ -1,0 +1,75 @@
+/*
+ * Classic (LiteGraph) look for Vue Nodes (Nodes 2.0).
+ *
+ * Activated by GraphView.vue, which adds the `classic-theme` class to <html>
+ * whenever the "classic" color palette is selected. The palette itself drives
+ * the colors that colorPaletteService's THEME_PROPERTY_MAP already maps onto
+ * CSS variables (node body, header surface, widget background, etc.). This
+ * file covers everything a color palette cannot express: the remaining CSS
+ * variables, geometry (corner radius, title height, widget row height), and
+ * typography, using the constants from litegraph's LiteGraphGlobal.ts.
+ */
+
+.classic-theme {
+  /* LiteGraph constants with no palette-to-CSS-variable mapping */
+  --node-component-surface: #353535; /* NODE_DEFAULT_BGCOLOR */
+  --node-component-slot-text: #aaa; /* NODE_TEXT_COLOR */
+  --node-component-outline: #fff; /* NODE_BOX_OUTLINE_COLOR */
+  --node-component-border: #666; /* WIDGET_OUTLINE_COLOR */
+  --node-divider: rgb(0 0 0 / 0.2); /* title separator line */
+}
+
+.classic-theme .lg-node {
+  /* LiteGraph ROUND_RADIUS = 8; Tailwind v4 rounded-xl resolves to this var */
+  --radius-xl: 8px;
+  font-family: Arial, Helvetica, sans-serif;
+  /* DEFAULT_SHADOW_COLOR drawn at offset (2, 2) with blur 3 */
+  filter: drop-shadow(2px 2px 3px rgb(0 0 0 / 0.5));
+}
+
+/* Title bar: NODE_TITLE_HEIGHT = 30, title text in NODE_TITLE_COLOR */
+.classic-theme .lg-node .lg-node-header {
+  min-height: 30px;
+  padding-top: 0;
+  padding-bottom: 0;
+  font-size: 13px;
+  color: var(--node-component-header, #999);
+}
+
+/* Collapse chevron becomes the classic title-box dot (NODE_DEFAULT_BOXCOLOR).
+   The icon is an iconify mask element; dropping the mask leaves a solid
+   square that border-radius turns into the dot. */
+.classic-theme .lg-node [data-testid='node-collapse-button'] i {
+  width: 10px;
+  height: 10px;
+  border-radius: 9999px;
+  background-color: var(--node-component-header-icon, #666);
+  mask: none;
+}
+
+/* Slot labels at LiteGraph text size */
+.classic-theme .lg-node .lg-slot {
+  font-size: 12px;
+}
+
+.classic-theme .lg-node .lg-node-widgets {
+  /* Pill capsule: NODE_WIDGET_HEIGHT / 2; rounded-md resolves to this var */
+  --radius-md: 10px;
+  font-size: 12px;
+}
+
+/* Classic widget rows are NODE_WIDGET_HEIGHT = 20px, not the default 24px */
+.classic-theme .lg-node .lg-node-widgets .h-6 {
+  height: 1.25rem;
+}
+
+/* WIDGET_OUTLINE_COLOR ring on widget control surfaces. Inset box-shadow
+   instead of border so control layout is unaffected. The [class*=...] hook
+   matches WidgetInputBaseClass surfaces; requiring rounded-md alongside it
+   excludes inner buttons (rounded-none) and hover-only variants. */
+.classic-theme
+  .lg-node
+  .lg-node-widgets
+  [class*='rounded-md'][class*='bg-component-node-widget-background'] {
+  box-shadow: inset 0 0 0 1px var(--node-component-border, #666);
+}
