@@ -328,6 +328,7 @@ const zSettings = z.object({
   'Comfy.Graph.CtrlShiftZoom': z.boolean(),
   'Comfy.Graph.DeduplicateSubgraphNodeIds': z.boolean(),
   'Comfy.Graph.LiveSelection': z.boolean(),
+  'Comfy.Graph.MakeSpaceWhenUnpackingSubgraph': z.boolean(),
   'Comfy.Graph.LinkMarkers': z.nativeEnum(LinkMarkerShape),
   'Comfy.Graph.ZoomSpeed': z.number(),
   'Comfy.Group.DoubleClickTitleToEdit': z.boolean(),

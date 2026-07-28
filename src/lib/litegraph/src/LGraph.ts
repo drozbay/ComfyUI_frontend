@@ -49,6 +49,7 @@ import type {
   OptionalProps,
   Point,
   Positionable,
+  ReadOnlyRect,
   Size
 } from './interfaces'
 import { LiteGraph, SubgraphNode } from './litegraph'
@@ -59,6 +60,7 @@ import {
   snapPoint
 } from './measure'
 import { warnDeprecated } from './utils/feedback'
+import { makeSpaceForRect } from './subgraph/makeSpaceForUnpack'
 import { SubgraphInput } from './subgraph/SubgraphInput'
 import { SubgraphInputNode } from './subgraph/SubgraphInputNode'
 import { SubgraphOutput } from './subgraph/SubgraphOutput'
@@ -1951,7 +1953,7 @@ export class LGraph
 
   unpackSubgraph(
     subgraphNode: SubgraphNode,
-    options?: { skipMissingNodes?: boolean }
+    options?: { skipMissingNodes?: boolean; makeSpace?: boolean }
   ) {
     if (!(subgraphNode instanceof SubgraphNode))
       throw new Error('Can only unpack Subgraph Nodes')
@@ -1969,9 +1971,10 @@ export class LGraph
 
   private _unpackSubgraphImpl(
     subgraphNode: SubgraphNode,
-    options?: { skipMissingNodes?: boolean }
+    options?: { skipMissingNodes?: boolean; makeSpace?: boolean }
   ) {
     const skipMissingNodes = options?.skipMissingNodes ?? false
+    const makeSpace = options?.makeSpace ?? false
 
     //NOTE: Create bounds can not be called on positionables directly as the subgraph is not being displayed and boundingRect is not initialized.
     //NOTE: NODE_TITLE_HEIGHT is explicitly excluded here
@@ -1990,6 +1993,23 @@ export class LGraph
     const toSelect: Positionable[] = []
     const offsetX = subgraphNode.pos[0] - center[0] + subgraphNode.size[0] / 2
     const offsetY = subgraphNode.pos[1] - center[1] + subgraphNode.size[1] / 2
+
+    // The unpacked contents need far more room than the single subgraph node
+    // occupied, so shove the surrounding graph aside before dropping them in.
+    if (makeSpace) {
+      // `bounds` deliberately excludes title height, so it is short by one
+      // title bar at the top. Add it back, otherwise a node sitting just above
+      // the unpacked content is left where it is and ends up overlapped.
+      const titleHeight = LiteGraph.NODE_TITLE_HEIGHT
+      const unpackedRect: ReadOnlyRect = [
+        bounds[0] + offsetX,
+        bounds[1] + offsetY - titleHeight,
+        bounds[2],
+        bounds[3] + titleHeight
+      ]
+      makeSpaceForRect(this, unpackedRect, { exclude: new Set([subgraphNode]) })
+    }
+
     const movedNodes = multiClone(subgraphNode.subgraph.nodes)
     const nodeIdMap = new Map<NodeId, NodeId>()
     for (const n_info of movedNodes) {

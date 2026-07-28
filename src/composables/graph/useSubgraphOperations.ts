@@ -1,5 +1,6 @@
 import { useSelectedLiteGraphItems } from '@/composables/canvas/useSelectedLiteGraphItems'
 import { SubgraphNode } from '@/lib/litegraph/src/litegraph'
+import { useSettingStore } from '@/platform/settings/settingStore'
 import { useWorkflowStore } from '@/platform/workflow/management/stores/workflowStore'
 import { useCanvasStore } from '@/renderer/core/canvas/canvasStore'
 import { useNodeOutputStore } from '@/stores/nodeOutputStore'
@@ -14,6 +15,7 @@ export function useSubgraphOperations() {
   const workflowStore = useWorkflowStore()
   const nodeOutputStore = useNodeOutputStore()
   const subgraphStore = useSubgraphStore()
+  const settingStore = useSettingStore()
 
   const convertToSubgraph = () => {
     const canvas = canvasStore.getCanvas()
@@ -42,9 +44,13 @@ export function useSubgraphOperations() {
     const graph = canvas.subgraph ?? canvas.graph
     if (!graph) return
 
+    const makeSpace = settingStore.get(
+      'Comfy.Graph.MakeSpaceWhenUnpackingSubgraph'
+    )
+
     for (const subgraphNode of subgraphNodes) {
       nodeOutputStore.revokeSubgraphPreviews(subgraphNode)
-      graph.unpackSubgraph(subgraphNode, { skipMissingNodes })
+      graph.unpackSubgraph(subgraphNode, { skipMissingNodes, makeSpace })
     }
     workflowStore.activeWorkflow?.changeTracker?.captureCanvasState()
   }

@@ -1289,6 +1289,17 @@ export const CORE_SETTINGS: SettingParams[] = [
     versionAdded: '1.40.0'
   },
   {
+    id: 'Comfy.Graph.MakeSpaceWhenUnpackingSubgraph',
+    category: ['Comfy', 'Graph', 'Subgraph'],
+    name: 'Make space when unpacking a subgraph',
+    tooltip:
+      'Push the surrounding nodes left and right to clear room for the unpacked nodes, instead of dropping them on top of the existing graph.',
+    type: 'boolean',
+    defaultValue: true,
+    experimental: true,
+    versionAdded: '1.49.0'
+  },
+  {
     id: 'Comfy.RightSidePanel.ShowErrorsTab',
     category: ['Comfy', 'Error System'],
     name: 'Show errors tab in side panel',
